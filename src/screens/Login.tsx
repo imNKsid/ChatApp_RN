@@ -13,11 +13,8 @@ import {RootStackParamList} from '../types/types';
 const Login = () => {
   const navigation = useNavigation<StackNavigationProp<RootStackParamList>>();
 
-  const [name, setName] = useState('');
   const [email, setEmail] = useState('');
-  const [mobile, setMobile] = useState('');
   const [password, setPassword] = useState('');
-  const [confirmPassword, setConfirmPassword] = useState('');
 
   return (
     <View style={styles.container}>
