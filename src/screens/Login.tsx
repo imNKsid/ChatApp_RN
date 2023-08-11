@@ -1,4 +1,5 @@
 import {
+  Alert,
   StyleSheet,
   Text,
   TextInput,
@@ -9,6 +10,7 @@ import React, {useState} from 'react';
 import {useNavigation} from '@react-navigation/native';
 import {StackNavigationProp} from '@react-navigation/stack';
 import {RootStackParamList} from '../types/types';
+import firestore from '@react-native-firebase/firestore';
 
 const Login = () => {
   const navigation = useNavigation<StackNavigationProp<RootStackParamList>>();
@@ -16,6 +18,23 @@ const Login = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
+  const loginUser = () => {
+    firestore()
+      .collection('users')
+      .where('email', '==', email)
+      .get()
+      .then(res => {
+        if (res.docs?.length > 0) {
+          console.log('User Fetched', JSON.stringify(res.docs[0].data()));
+        } else {
+          Alert.alert('User not found');
+        }
+      })
+      .catch(err => {
+        console.log('Error =>', err);
+        Alert.alert('User not found');
+      });
+  };
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Login</Text>
@@ -31,11 +50,11 @@ const Login = () => {
         value={password}
         onChangeText={t => setPassword(t)}
       />
-      <TouchableOpacity onPress={() => {}} style={styles.btn}>
+      <TouchableOpacity onPress={() => loginUser()} style={styles.btn}>
         <Text style={styles.btnText}>Login</Text>
       </TouchableOpacity>
 
-      <TouchableOpacity onPress={() => navigation.navigate('SignUp')}>
+      <TouchableOpacity onPress={() => navigation.goBack()}>
         <Text style={styles.loginText}>Or Sign up</Text>
       </TouchableOpacity>
     </View>

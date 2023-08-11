@@ -1,4 +1,5 @@
 import {
+  Alert,
   StyleSheet,
   Text,
   TextInput,
@@ -9,6 +10,8 @@ import React, {useState} from 'react';
 import {useNavigation} from '@react-navigation/native';
 import {StackNavigationProp} from '@react-navigation/stack';
 import {RootStackParamList} from '../types/types';
+import firestore from '@react-native-firebase/firestore';
+import uuid from 'react-native-uuid';
 
 const SignUp = () => {
   const navigation = useNavigation<StackNavigationProp<RootStackParamList>>();
@@ -18,6 +21,53 @@ const SignUp = () => {
   const [mobile, setMobile] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
+
+  const clearData = () => {
+    setName('');
+    setEmail('');
+    setMobile('');
+    setPassword('');
+    setConfirmPassword('');
+  };
+  const registerUser = () => {
+    const userId = uuid.v4();
+
+    firestore()
+      .collection('users')
+      .doc(userId as string)
+      .set({
+        name: name,
+        email: email,
+        password: password,
+        mobile: mobile,
+        userId: userId,
+      })
+      .then(res => {
+        console.log('User Created', res);
+        Alert.alert('User created');
+        clearData();
+      })
+      .catch(err => {
+        console.log('Error =>', err);
+      });
+  };
+
+  const validate = () => {
+    let isValid = true;
+    if (
+      name === '' ||
+      email === '' ||
+      mobile === '' ||
+      password === '' ||
+      confirmPassword === ''
+    ) {
+      isValid = false;
+    }
+    if (password !== confirmPassword) {
+      isValid = false;
+    }
+    return isValid;
+  };
 
   return (
     <View style={styles.container}>
@@ -52,7 +102,15 @@ const SignUp = () => {
         value={confirmPassword}
         onChangeText={t => setConfirmPassword(t)}
       />
-      <TouchableOpacity onPress={() => {}} style={styles.btn}>
+      <TouchableOpacity
+        onPress={() => {
+          if (validate()) {
+            registerUser();
+          } else {
+            Alert.alert('Please enter correct data');
+          }
+        }}
+        style={styles.btn}>
         <Text style={styles.btnText}>SignUp</Text>
       </TouchableOpacity>
 
