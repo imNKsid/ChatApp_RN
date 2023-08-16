@@ -54,7 +54,7 @@ const Login = () => {
         <Text style={styles.btnText}>Login</Text>
       </TouchableOpacity>
 
-      <TouchableOpacity onPress={() => navigation.goBack()}>
+      <TouchableOpacity onPress={() => navigation.navigate('SignUp')}>
         <Text style={styles.loginText}>Or Sign up</Text>
       </TouchableOpacity>
     </View>
@@ -101,7 +101,9 @@ const styles = StyleSheet.create({
   loginText: {
     marginTop: 20,
     fontSize: 20,
+    fontWeight: 'bold',
     alignSelf: 'center',
     textDecorationLine: 'underline',
+    color: '#000',
   },
 });
