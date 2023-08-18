@@ -5,15 +5,18 @@ import {
   Dimensions,
   FlatList,
   Image,
+  TouchableOpacity,
 } from 'react-native';
 import React, {useEffect, useState} from 'react';
 import firestore from '@react-native-firebase/firestore';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import {useNavigation} from '@react-navigation/native';
 
 const {height, width} = Dimensions.get('window');
 
 const Users = () => {
   const [users, setUsers] = useState([]);
+  const navigation = useNavigation();
 
   useEffect(() => {
     getUsers();
@@ -37,15 +40,16 @@ const Users = () => {
       });
   };
   const renderUser = ({item, index}: {item: {name: string}; index: number}) => {
-    console.log('item =>', item, '\n', index);
     return (
-      <View style={styles.userItem}>
+      <TouchableOpacity
+        style={styles.userItem}
+        onPress={() => navigation.navigate('Chat', {data: item})}>
         <Image
           source={require('../assets/images/user.png')}
           style={styles.userImg}
         />
         <Text style={styles.userName}>{item.name}</Text>
-      </View>
+      </TouchableOpacity>
     );
   };
 
