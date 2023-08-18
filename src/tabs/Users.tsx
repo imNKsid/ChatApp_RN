@@ -11,19 +11,25 @@ import React, {useEffect, useState} from 'react';
 import firestore from '@react-native-firebase/firestore';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {useNavigation} from '@react-navigation/native';
+import {StackNavigationProp} from '@react-navigation/stack';
 
-const {height, width} = Dimensions.get('window');
+import {User} from '../types/types';
+import {RootStackParamList} from '../types/types';
+
+const {width} = Dimensions.get('window');
+
+let userId: any;
 
 const Users = () => {
   const [users, setUsers] = useState([]);
-  const navigation = useNavigation();
+  const navigation = useNavigation<StackNavigationProp<RootStackParamList>>();
 
   useEffect(() => {
     getUsers();
   }, []);
 
   const getUsers = async () => {
-    const userId = await AsyncStorage.getItem('USERID');
+    userId = await AsyncStorage.getItem('USERID');
     let tempData: any = [];
 
     firestore()
@@ -39,11 +45,11 @@ const Users = () => {
         setUsers(tempData);
       });
   };
-  const renderUser = ({item, index}: {item: {name: string}; index: number}) => {
+  const renderUser = ({item, index}: {item: User; index: number}) => {
     return (
       <TouchableOpacity
         style={styles.userItem}
-        onPress={() => navigation.navigate('Chat', {data: item})}>
+        onPress={() => navigation.navigate('Chat', {data: item, id: userId})}>
         <Image
           source={require('../assets/images/user.png')}
           style={styles.userImg}
