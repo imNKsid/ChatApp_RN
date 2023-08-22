@@ -6,7 +6,7 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {useNavigation} from '@react-navigation/native';
 import {StackNavigationProp} from '@react-navigation/stack';
 
@@ -22,6 +22,11 @@ const Login = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [showLoader, setShowLoader] = useState(false);
+
+  useEffect(() => {
+    setEmail('');
+    setPassword('');
+  }, []);
 
   const loginUser = () => {
     setShowLoader(true);
@@ -70,6 +75,7 @@ const Login = () => {
         style={styles.input}
         value={password}
         onChangeText={t => setPassword(t)}
+        secureTextEntry
       />
       <TouchableOpacity onPress={() => loginUser()} style={styles.btn}>
         <Text style={styles.btnText}>Login</Text>

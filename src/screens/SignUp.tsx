@@ -95,12 +95,14 @@ const SignUp = () => {
         style={styles.input}
         value={password}
         onChangeText={t => setPassword(t)}
+        secureTextEntry
       />
       <TextInput
         placeholder="Enter Confirm Password"
         style={styles.input}
         value={confirmPassword}
         onChangeText={t => setConfirmPassword(t)}
+        secureTextEntry
       />
       <TouchableOpacity
         onPress={() => {
@@ -161,7 +163,9 @@ const styles = StyleSheet.create({
   loginText: {
     marginTop: 20,
     fontSize: 20,
+    fontWeight: 'bold',
     alignSelf: 'center',
     textDecorationLine: 'underline',
+    color: '#000',
   },
 });

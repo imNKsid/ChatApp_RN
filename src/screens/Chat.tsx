@@ -50,7 +50,7 @@ const Chat = () => {
       ...msg,
       sendBy: route?.params?.id,
       sendTo: route?.params?.data.userId,
-      createdAt: new Date(msg.createdAt), //Date.parse(msg?.createdAt),
+      createdAt: Date.parse(`${msg?.createdAt}`),
     };
 
     setMessages(previousMessages =>
